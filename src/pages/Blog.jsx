@@ -103,7 +103,7 @@ export default function Blog() {
   return (
     <>
       <div className="min-h-screen pt-10 md:pt-5 md:m-7 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-        <ol className="relative border-s border-gray-200 dark:border-gray-700 m-10">
+        <ol className="relative border-s border-gray-300 dark:border-gray-700 m-10">
           {paginatedData.map((el) => (
             <Post
               key={el.id}
@@ -121,7 +121,7 @@ export default function Blog() {
               <button
                 disabled={currentPage === 1}
                 onClick={() => changePage(currentPage - 1)}
-                className="flex hover:scale-120 items-center justify-center disabled:hover:cursor-auto cursor-pointer disabled:hover:bg-gray-400 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:text-gray-600 px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex hover:scale-120 items-center justify-center disabled:hover:cursor-auto disabled:hover:scale-100 cursor-pointer disabled:hover:bg-gray-400 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:text-gray-600 px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -144,9 +144,9 @@ export default function Blog() {
                 <button
                   key={p}
                   onClick={() => changePage(p)}
-                  className={`hover:scale-120 flex cursor-pointer items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700  dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 
+                  className={`hover:scale-120 flex cursor-pointer items-center justify-center px-3 h-8 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700  dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 
                     ${
-                      currentPage == p ? "bg-gray-600 dark:bg-gray-700 " : "bg-gray-400 dark:bg-gray-800"
+                      currentPage == p ? "bg-gray-300 dark:bg-gray-700 " : "bg-white dark:bg-gray-800"
                     } dark:hover:text-white`}
                 >
                   {p}
@@ -157,7 +157,7 @@ export default function Blog() {
               <button
                 disabled={currentPage === pages.length}
                 onClick={() => changePage(currentPage + 1)}
-                className="flex hover:scale-120  items-center justify-center disabled:hover:cursor-auto cursor-pointer disabled:hover:bg-gray-400 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:text-gray-600 px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex hover:scale-120  items-center justify-center disabled:hover:cursor-auto cursor-pointer disabled:hover:bg-gray-400 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:text-gray-600 disabled:hover:scale-100 px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
