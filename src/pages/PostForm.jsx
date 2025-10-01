@@ -190,7 +190,7 @@ export default function PostForm() {
           </span>
           <input
             type="checkbox"
-            className="toggle toggle-primary"
+            className="toggle toggle-primary bg-gray-600 dark:bg-gray-800" 
             checked={uploadType === "upload"}
             onChange={(e) => setUploadType(e.target.checked ? "upload" : "url")}
           />
@@ -298,7 +298,7 @@ export default function PostForm() {
               }}
               type="reset"
               className="btn px-4 py-2 rounded-2xl border border-gray-300 dark:border-gray-600 
-                text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                text-gray-300 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               Cancel
             </button>
