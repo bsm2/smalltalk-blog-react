@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import Error from "./../components/Error";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebase";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function Login() {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       navigate("/");
     } catch (err) {
+      toast.error("Invalid Credentials.");
       console.log(err.message);
     }
   };

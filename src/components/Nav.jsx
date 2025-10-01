@@ -43,7 +43,7 @@ export default function Nav() {
                 </div>
                 <ul
                   tabIndex={0}
-                  className="menu menu-sm dropdown-content dark:bg-gray-800 bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                  className="menu menu-sm dropdown-content bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-xl z-10 mt-3 w-52 p-2 shadow-lg border border-gray-200 dark:border-gray-700"
                 >
                   <li>
                     <p className="mb-2 cursor-default hover:none">
