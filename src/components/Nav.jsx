@@ -46,7 +46,7 @@ export default function Nav() {
                   className="menu menu-sm dropdown-content bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-xl z-10 mt-3 w-52 p-2 shadow-lg border border-gray-200 dark:border-gray-700"
                 >
                   <li>
-                    <p className="mb-2 cursor-default hover:none">
+                    <p className="mb-2 cursor-default hover:none ">
                       {"Hi, " + user?.displayName}
                     </p>
                   </li>
@@ -55,7 +55,7 @@ export default function Nav() {
                   </li>
                 </ul>
               </div>
-              <p className="text-md text-gray-600 dark:text-gray-300 whitespace-nowrap">
+              <p className="text-md text-gray-600 dark:text-gray-300 whitespace-nowrap hidden md:block">
                 {user.displayName}
               </p>
             </div>
