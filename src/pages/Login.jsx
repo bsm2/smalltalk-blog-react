@@ -157,7 +157,7 @@ export default function Login() {
 
         <div className="hidden md:flex w-1/2 justify-center">
           <img
-            src="/illustration.svg"
+            src="/illustration.webp"
             alt="Illustration"
             className="max-w-sm"
           />
