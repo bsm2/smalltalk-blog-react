@@ -17,11 +17,11 @@ export default function Post(props) {
           <img
             src={post.image_url}
             alt="Sample"
-            className="w-50 h-auto rounded-xl object-cover shadow-lg mt-5"
+            className="w-screen h-auto md:w-50 rounded-xl object-cover shadow-lg mt-5"
           />
 
           <div className="mt-3 md:mx-5 flex  flex-col">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-xl mb-2 font-bold text-gray-900 dark:text-white">
               {post.title}
             </h3>
             <p className="mb-5 text-base font-normal text-gray-500 dark:text-gray-400">
@@ -53,7 +53,7 @@ export default function Post(props) {
                   </svg>
                 </div>
 
-                <span className="text-sm text-gray-600 dark:text-gray-300">
+                <span className="text-md font-semibold text-gray-600 dark:text-gray-300">
                   {post.author}
                 </span>
               </div>
