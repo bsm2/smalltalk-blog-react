@@ -203,28 +203,30 @@ export default function Blog() {
         </button>
       )}
 
-      <Link
-        to="/posts/create"
-        className="cursor-pointer fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center
+      {
+        user && <Link
+          to="/posts/create"
+          className="cursor-pointer fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center
                  bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200
                  shadow-lg border border-white dark:border-gray-900
                  hover:scale-110 hover:bg-gray-300 dark:hover:bg-gray-600"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-          className="w-6 h-6"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-      </Link>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+        </Link>
+      }
     </>
   );
 }
