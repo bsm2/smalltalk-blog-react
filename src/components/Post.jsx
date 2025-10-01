@@ -17,7 +17,7 @@ export default function Post(props) {
           <img
             src={post.image_url}
             alt="Sample"
-            className="w-screen h-auto md:w-50 rounded-xl object-cover shadow-lg mt-5"
+            className="w-screen h-auto md:w-90 rounded-xl object-cover shadow-lg mt-5"
           />
 
           <div className="mt-3 md:mx-5 flex  flex-col">
