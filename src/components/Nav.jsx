@@ -1,7 +1,6 @@
 import { Link } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 import Logout from "./Logout";
-import ThemeToggle from "./ThemeToggle";
 
 export default function Nav() {
   const { user } = useAuth();
