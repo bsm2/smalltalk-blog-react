@@ -69,7 +69,7 @@ export default function Blog() {
     return () => unsubscribe();
   }, []);
 
-  const itemsCount = 5;
+  const itemsCount = 12;
   const [currentPage, setCurrentPage] = useState(1);
   const pagesCount = Math.ceil(posts.length / itemsCount);
   const pages = Array.from({ length: pagesCount }, (_, i) => i + 1);

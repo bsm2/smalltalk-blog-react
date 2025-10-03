@@ -1,8 +1,9 @@
 @import "tailwindcss" {
-  themes: light;
+  darkMode: "class"; /* force dark mode to use the "dark" class */
 }
+
 @plugin "daisyui" {
-  themes: dark --default;
+  themes: dark; /* only load dark theme */
 }
 @tailwind;
 

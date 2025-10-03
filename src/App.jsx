@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import PostForm from "./pages/PostForm";
 import Register from "./pages/Register";
 import { ToastContainer } from "react-toastify";
+import RequireAuth from "./middleware/RequireAuth";
 
 function App() {
   const location = useLocation();
@@ -15,16 +16,30 @@ function App() {
       {!hideNav && <Nav />}
       <div>
         <Routes>
-          <Route path="/" element={<Blog />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/posts/create" element={<PostForm />} />
-          <Route path="/posts/:id" element={<PostForm />} />
+          <Route path="/" element={<Blog />} />
+          <Route
+            path="/posts/create"
+            element={
+              <RequireAuth>
+                <PostForm />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/posts/:id"
+            element={
+              <RequireAuth>
+                <PostForm />
+              </RequireAuth>
+            }
+          />
         </Routes>
         <ToastContainer
           toastStyle={{
             backgroundColor: "#1F2937",
-            color: "white"
+            color: "white",
           }}
         />
       </div>

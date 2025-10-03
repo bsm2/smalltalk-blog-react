@@ -1,10 +1,14 @@
 import { signOut } from "firebase/auth";
 import { auth } from "../services/firebase";
+import { useNavigate } from "react-router";
 
 export default function Logout() {
+  const navigate = useNavigate();
   const handleSignOut = async () => {
     try {
       await signOut(auth);
+      localStorage.removeItem("user");
+      navigate("/login");
     } catch (err) {
       console.error(err);
     }

@@ -44,8 +44,11 @@ export default function PostForm() {
       try {
         const res = await get(dbRef(db, "posts/" + id));
         if (res.exists()) {
-          reset(res.val());
-          console.log(res.val());
+          setLoadingPrev(true);
+          const post = res.val();
+          reset(post);
+          setPreview(post.image_url);
+          setLoadingPrev(false);
         }
       } catch (err) {
         toast.error("Failed to load post");
@@ -64,7 +67,9 @@ export default function PostForm() {
         const formData = new FormData();
         formData.append("image", file);
         const res = await fetch(
-          `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`,
+          `https://api.imgbb.com/1/upload?key=${
+            import.meta.env.VITE_IMGBB_API_KEY
+          }`,
           {
             method: "POST",
             body: formData,
@@ -190,7 +195,7 @@ export default function PostForm() {
           </span>
           <input
             type="checkbox"
-            className="toggle toggle-primary bg-gray-600 dark:bg-gray-800" 
+            className="toggle toggle-primary bg-gray-600 dark:bg-gray-800"
             checked={uploadType === "upload"}
             onChange={(e) => setUploadType(e.target.checked ? "upload" : "url")}
           />
