@@ -9,6 +9,5 @@ export default function RequireAuth({ children }) {
   if (!user && !loading) {
     return <Navigate to="/login" replace />;
   }
-
   return children;
 }
