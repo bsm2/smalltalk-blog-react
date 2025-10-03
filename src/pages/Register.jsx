@@ -64,12 +64,12 @@ export default function Register() {
     }
   };
   const onError = (errors) => {
-    console.log("Validation errors ❌", errors);
+    console.log(errors);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4   md:my-0">
-      <div className="max-w-4xl w-full flex flex-col-reverse md:flex-row items-center md:gap-10">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4  md:my-0">
+      <div className="max-w-4xl w-full flex flex-col-reverse items-center justify-center md:flex-row gap-1 md:gap-10">
         <div className="w-full md:w-1/2 bg-white dark:bg-gray-800 rounded-xl shadow-md p-3 md:p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300 text-center">
             Sign up to{" "}
@@ -83,7 +83,7 @@ export default function Register() {
 
           <form
             onSubmit={handleSubmit(onSubmit, onError)}
-            className="mt-6 space-y-5"
+            className="md:mt-6 mt-2 space-y-5"
           >
             <div>
               <label
@@ -190,11 +190,11 @@ export default function Register() {
           </p>
         </div>
 
-        <div className="md:flex w-1/2 justify-center">
+        <div className="text-center md:ml-0 md:flex md:w-1/2 items-center justify-center self-center">
           <img
             src="/illustration.webp"
             alt="Illustration"
-            className=""
+            className="w-30 md:w-full"
           />
         </div>
       </div>
