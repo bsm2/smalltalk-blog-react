@@ -5,15 +5,37 @@ import { auth, db } from "../services/firebase";
 import { ref, set } from "firebase/database";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router";
+import Password from "./../components/Password";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function Register() {
   const navigate = useNavigate();
+  const schema = z
+    .object({
+      name: z.string().min(3).max("10"),
+      email: z.string().email().min(2, "Email is required."),
+      password: z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .max(20, "Password cannot exceed 20 characters")
+        .regex(
+          /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+          "Password must contain at least 1 uppercase letter, 1 number, and 1 special character"
+        ),
+      confirmPassword: z.string().min(1, "Confirm password is required"),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      path: ["confirmPassword"],
+      message: "Passwords do not match",
+    })
+    .strict();
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm({ resolver: zodResolver(schema) });
   const onSubmit = async (data) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -46,9 +68,9 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-      <div className="max-w-4xl w-full flex flex-col md:flex-row items-center gap-10">
-        <div className="w-full md:w-1/2 bg-white dark:bg-gray-800 rounded-xl shadow-md p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4   md:my-0">
+      <div className="max-w-4xl w-full flex flex-col-reverse md:flex-row items-center md:gap-10">
+        <div className="w-full md:w-1/2 bg-white dark:bg-gray-800 rounded-xl shadow-md p-3 md:p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300 text-center">
             Sign up to{" "}
             <Link
@@ -72,11 +94,7 @@ export default function Register() {
               </label>
               <div className="relative mt-3">
                 <input
-                  {...register("name", {
-                    required: true,
-                    minLength: 3,
-                    maxLength: 25,
-                  })}
+                  {...register("name")}
                   id="name"
                   type="text"
                   placeholder="Enter name"
@@ -94,11 +112,11 @@ export default function Register() {
                   </svg>
                 </span>
               </div>
-              {errors.name?.type == "required" && (
+              {errors.name?.type == "too_small" && (
                 <Error message={"Name is required"} />
               )}
-              {errors.name?.type == "minLength" && (
-                <Error message={"Chars should be less more than 3"} />
+              {errors.name?.type == "too_big" && (
+                <Error message={"Chars should be less than 10"} />
               )}
             </div>
             <div>
@@ -132,74 +150,27 @@ export default function Register() {
                   </svg>
                 </span>
               </div>
-              {errors.email?.type == "required" && (
-                <Error message={"Email is required"} />
+              {errors.email?.type == "invalid_format" && (
+                <Error message={errors.email?.message} />
               )}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Password
-              </label>
-              <div className="relative mt-3">
-                <input
-                  {...register("password", {
-                    required: "Password is required",
-                    minLength: {
-                      value: 8,
-                      message: "Password must be at least 8 characters",
-                    },
-                    maxLength: {
-                      value: 20,
-                      message: "Password cannot exceed 20 characters",
-                    },
-                    pattern: {
-                      value:
-                        /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-                      message:
-                        "Password must contain an uppercase letter, a number, and a special character",
-                    },
-                  })}
-                  type="password"
-                  placeholder="Enter password"
-                  className="w-full pl-10 pr-10 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 
-                             border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                />
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M5 8V6a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1Zm2-2v2h6V6a3 3 0 1 0-6 0Z" />
-                  </svg>
-                </span>
-                <span className="absolute inset-y-0 right-3 flex items-center text-gray-400 cursor-pointer">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"
-                    />
-                  </svg>
-                </span>
-              </div>
-              {errors.password && <Error message={errors.password?.message} />}
-            </div>
+            <Password
+              id="password"
+              label="Password"
+              name="password"
+              placeholder="Enter password"
+              error={errors.password?.message}
+              register={register}
+            />
+            <Password
+              id="confirmPassword"
+              label="Confirm Password"
+              register={register}
+              name="confirmPassword"
+              placeholder="Confirm password"
+              error={errors.confirmPassword?.message}
+            />
 
             <button
               type="submit"
@@ -219,11 +190,11 @@ export default function Register() {
           </p>
         </div>
 
-        <div className="hidden md:flex w-1/2 justify-center">
+        <div className="md:flex w-1/2 justify-center">
           <img
             src="/illustration.webp"
             alt="Illustration"
-            className="max-w-sm"
+            className=""
           />
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 import Logout from "./Logout";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Nav() {
   const { user } = useAuth();
@@ -20,7 +21,7 @@ export default function Nav() {
           {!user && (
             <Link
               to={"/login"}
-              className="btn bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 hover:scale-110 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-2xl"
+              className="btn bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 hover:scale-95 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-2xl"
             >
               Sign in
             </Link>

@@ -4,20 +4,38 @@ import Error from "./../components/Error";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebase";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Password from "../components/Password";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [show, setShow] = useState(false);
+  const schema = z
+    .object({
+      email: z.email().min(2, "Email is required."),
+      password: z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .max(20, "Password cannot exceed 20 characters")
+        .regex(
+          /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+          "Password must contain at least 1 uppercase letter, 1 number, and 1 special character"
+        ),
+    })
+    .strict();
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm({ resolver: zodResolver(schema) });
   const onSubmit = async (data) => {
     try {
-      const res = await signInWithEmailAndPassword(auth, data.email, data.password);
+      const res = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
       localStorage.setItem("user", JSON.stringify(res.user));
       navigate("/");
     } catch (err) {
@@ -26,9 +44,13 @@ export default function Login() {
     }
   };
 
+  const onError = (errors) => {
+    console.log(errors);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-      <div className="max-w-4xl w-full flex flex-col md:flex-row items-center gap-10">
+      <div className="max-w-4xl w-full flex flex-col-reverse md:flex-row items-center md:gap-10">
         <div className="w-full md:w-1/2 bg-white dark:bg-gray-800 rounded-xl shadow-md p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300 text-center">
             Sign in to{" "}
@@ -40,7 +62,10 @@ export default function Login() {
             </Link>
           </h2>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-5">
+          <form
+            onSubmit={handleSubmit(onSubmit, onError)}
+            className="mt-6 space-y-5"
+          >
             <div>
               <label
                 htmlFor="email"
@@ -50,12 +75,9 @@ export default function Login() {
               </label>
               <div className="relative mt-3">
                 <input
-                  {...register("email", {
-                    required: true,
-                  })}
+                  {...register("email")}
                   id="email"
                   name="email"
-                  type="email"
                   placeholder="Enter email"
                   className="w-full pl-10 pr-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 
                              border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
@@ -72,95 +94,18 @@ export default function Login() {
                   </svg>
                 </span>
               </div>
-              {errors.email?.type == "required" && (
-                <Error message={"Email is required"} />
+              {errors.email?.type == "invalid_format" && (
+                <Error message={errors.email.message} />
               )}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Password
-              </label>
-              <div className="relative mt-3">
-                <input
-                  {...register("password", {
-                    required: "Password is required",
-                    minLength: {
-                      value: 8,
-                      message: "Password must be at least 8 characters",
-                    },
-                    maxLength: {
-                      value: 20,
-                      message: "Password cannot exceed 20 characters",
-                    },
-                    pattern: {
-                      value:
-                        /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-                      message:
-                        "Password must contain an uppercase letter, a number, and a special character",
-                    },
-                  })}
-                  type={show ? "text" : "password"}
-                  placeholder="Enter password"
-                  className="w-full pl-10 pr-10 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 
-                             border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                />
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M5 8V6a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1Zm2-2v2h6V6a3 3 0 1 0-6 0Z" />
-                  </svg>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setShow(!show)}
-                  className="absolute inset-y-0 right-3 flex items-center text-gray-400 cursor-pointer"
-                >
-                  {!show ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="size-5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"
-                      />
-                    </svg>
-                  )}
-                </button>
-              </div>
-              {errors.password && <Error message={errors.password?.message} />}
-            </div>
+            <Password
+              label="Password"
+              name="password"
+              placeholder="Enter password"
+              error={errors.password?.message}
+              register={register}
+            />
 
             <button
               type="submit"
@@ -181,11 +126,11 @@ export default function Login() {
           </p>
         </div>
 
-        <div className="hidden md:flex w-1/2 justify-center">
+        <div className="md:flex w-1/2 justify-center items-center">
           <img
             src="/illustration.webp"
             alt="Illustration"
-            className="max-w-sm"
+            className="h-auto"
           />
         </div>
       </div>

@@ -1,33 +1,21 @@
 import React, { useState } from "react";
+import Error from "./Error";
 
-export default function Password() {
+export default function Password(props) {
   const [show, setShow] = useState(false);
+  const { error, register, name, placeholder, label } = props;
 
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-        Password
+        {label}
       </label>
       <div className="relative mt-3">
         <input
-          {...register("password", {
-            required: "Password is required",
-            minLength: {
-              value: 8,
-              message: "Password must be at least 8 characters",
-            },
-            maxLength: {
-              value: 20,
-              message: "Password cannot exceed 20 characters",
-            },
-            pattern: {
-              value: /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-              message:
-                "Password must contain an uppercase letter, a number, and a special character",
-            },
-          })}
+          {...register(name)}
+          name={name}
           type={show ? "text" : "password"}
-          placeholder="Enter password"
+          placeholder={placeholder}
           className="w-full pl-10 pr-10 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 
                              border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
         />
@@ -85,7 +73,7 @@ export default function Password() {
           )}
         </button>
       </div>
-      {errors.password && <Error message={errors.password?.message} />}
+      {error && <Error message={error} />}
     </div>
   );
 }

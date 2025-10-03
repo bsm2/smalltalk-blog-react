@@ -3,7 +3,7 @@
 }
 
 @plugin "daisyui" {
-  themes: dark; /* only load dark theme */
+  themes: dark --default; /* only load dark theme */
 }
 @tailwind;
 
