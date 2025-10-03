@@ -22,7 +22,9 @@ export default function PostForm() {
     formState: { errors, isSubmitting },
     handleSubmit,
     reset,
-  } = useForm({});
+  } = useForm({
+    mode: "onChange",
+  });
   const navigate = useNavigate();
 
   const handleImageChange = (e) => {
@@ -214,7 +216,7 @@ export default function PostForm() {
             </label>
             <input
               {...register("image_url", {
-                required: uploadType == "url" ? true : false,
+                required: uploadType !== "url" ? false : true,
                 pattern: {
                   value: /^(https?:\/\/[^\s$.?#].[^\s]*)$/i,
                   message: "Invalid URL format",
@@ -228,10 +230,13 @@ export default function PostForm() {
                      bg-gray-50 dark:bg-gray-900 
                      text-gray-900 dark:text-gray-100 
                      focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              onChange={handleImageChange}
+              onChange={(e) => {
+                handleImageChange(e);
+                register("image_url").onChange(e);
+              }}
             />
             {errors.image_url?.type === "required" && (
-              <Error message={"Image is required"} />
+              <Error message={"Image URL is required"} />
             )}
             {errors.image_url?.type === "pattern" && (
               <Error message={errors.image_url?.message} />
@@ -260,11 +265,16 @@ export default function PostForm() {
                hover:file:bg-blue-700 
                focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
               {...register("image", {
-                required: !id && uploadType == "upload" ? true : false,
+                required: !id && uploadType === "upload" ? true : false,
               })}
-              onChange={handleImageChange}
+              onChange={(e) => {
+                handleImageChange(e);
+                register("image").onChange(e);
+              }}
             />
-            {errors.image && <Error message={"Image is required"} />}
+            {errors.image?.type == "required" && (
+              <Error message={"Image is required"} />
+            )}
           </div>
         )}
 
