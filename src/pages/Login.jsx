@@ -50,8 +50,8 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-      <div className="max-w-4xl w-full flex flex-col-reverse md:flex-row items-center md:gap-10">
-        <div className="w-full md:w-1/2 bg-white dark:bg-gray-800 rounded-xl shadow-md p-8">
+      <div className="max-w-7xl w-full flex flex-col-reverse md:flex-row items-center justify-center md:gap-30">
+        <div className="w-full md:w-1/3 bg-white dark:bg-gray-800 rounded-xl shadow-md p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300 text-center">
             Sign in to{" "}
             <Link
@@ -126,11 +126,11 @@ export default function Login() {
           </p>
         </div>
 
-        <div className="md:flex w-1/2 justify-center items-center">
+        <div className="pt-10 md:flex w-1/2 justify-center items-center self-center">
           <img
             src="/illustration.webp"
             alt="Illustration"
-            className="h-auto"
+            className="h-auto w-full"
           />
         </div>
       </div>

@@ -68,9 +68,9 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4  md:my-0">
-      <div className="max-w-4xl w-full flex flex-col-reverse items-center justify-center md:flex-row gap-1 md:gap-10">
-        <div className="w-full md:w-1/2 bg-white dark:bg-gray-800 rounded-xl shadow-md p-3 md:p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 md:my-0">
+      <div className="max-w-7xl w-full flex flex-col-reverse items-center justify-center md:flex-row gap-1 md:gap-30">
+        <div className="w-full md:w-1/3 bg-white dark:bg-gray-800 rounded-xl shadow-md p-3 md:p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300 text-center">
             Sign up to{" "}
             <Link
@@ -190,7 +190,7 @@ export default function Register() {
           </p>
         </div>
 
-        <div className="text-center md:ml-0 md:flex md:w-1/2 items-center justify-center self-center">
+        <div className="pt-10 md:ml-0 md:flex md:w-1/2 items-center justify-center self-center">
           <img
             src="/illustration.webp"
             alt="Illustration"
