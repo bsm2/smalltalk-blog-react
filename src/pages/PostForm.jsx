@@ -3,10 +3,13 @@ import Error from "../components/Error";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router";
 import { db } from "../services/firebase";
-import { ref as dbRef, push, get, update } from "firebase/database";
+import { ref as dbRef, get } from "firebase/database";
 import { useAuth } from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
+import { useDispatch } from "react-redux";
+import { createPost, updatePost } from "../features/postSlice";
+import storeImage from "../utilities/storeImg";
 
 export default function PostForm() {
   const { id } = useParams();
@@ -16,6 +19,7 @@ export default function PostForm() {
   const [isInvalid, setIsInvalid] = useState(false);
   const [preview, setPreview] = useState(null);
   const [uploadType, setUploadType] = useState("url");
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -63,47 +67,16 @@ export default function PostForm() {
   }, [id, reset]);
 
   const onSubmit = async (data) => {
-    try {
-      if (uploadType == "upload") {
-        const file = data.image[0];
-        const formData = new FormData();
-        formData.append("image", file);
-        const res = await fetch(
-          `https://api.imgbb.com/1/upload?key=${
-            import.meta.env.VITE_IMGBB_API_KEY
-          }`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        const resData = await res.json();
-        data.image_url = resData.data.url;
-      }
-
-      if (id) {
-        await update(dbRef(db, "posts/" + id), {
-          ...data,
-          updatedAt: Date.now(),
-        });
-        toast.success("Post Updated successfully!");
-      } else {
-        const postsRef = dbRef(db, "posts");
-        await push(postsRef, {
-          title: data.title,
-          description: data.description,
-          image_url: data.image_url,
-          author: user.displayName,
-          createdAt: Date.now(),
-        });
-        toast.success("Post added successfully!");
-      }
-
-      navigate("/");
-    } catch (err) {
-      toast.error("Error happened");
-      console.log(err);
+    if (uploadType == "upload") {
+      data.image_url = await storeImage(data.image[0]);
     }
+
+    if (id) {
+      dispatch(updatePost({ id, data }));
+    } else {
+      dispatch(createPost({ data, user }));
+    }
+    navigate("/");
   };
 
   const handelInvalid = () => {

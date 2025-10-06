@@ -8,9 +8,11 @@ import Register from "./pages/Register";
 import { ToastContainer } from "react-toastify";
 import RequireAuth from "./middleware/RequireAuth";
 
+
 function App() {
   const location = useLocation();
   const hideNav = ["/login", "/register"].includes(location.pathname);
+
   return (
     <>
       {!hideNav && <Nav />}

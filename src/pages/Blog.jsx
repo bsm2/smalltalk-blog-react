@@ -1,18 +1,29 @@
-import { onValue, ref, remove } from "firebase/database";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { db } from "../services/firebase";
 import { confirmToast } from "../components/ConfirmToast";
 import Skeleton from "../components/Skeleton";
 import { useAuth } from "../hooks/useAuth";
-import { toast } from "react-toastify";
 import Post from "../components/Post";
+import { useDispatch, useSelector } from "react-redux";
+import { deletePost, fetchPosts } from "../features/postSlice";
 
 export default function Blog() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const itemsCount = 12;
   const { user } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
+  const { loading, posts } = useSelector((state) => state.data);
+  const [currentPage, setCurrentPage] = useState(1);
+  const dispatch = useDispatch();
+
+  const pagesCount = Math.ceil(posts.length / itemsCount);
+  const pages = Array.from({ length: pagesCount }, (_, i) => i + 1);
+  let start = (currentPage - 1) * itemsCount;
+  let end = start + itemsCount;
+  let paginatedData = posts.slice(start, end);
+
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, [dispatch]);
 
   useEffect(() => {
     const toggleVisibility = () => {
@@ -35,47 +46,10 @@ export default function Blog() {
 
   const handleDelete = async (id) => {
     confirmToast("Are you sure you want to delete this post?", async () => {
-      const oldPosts = [...posts];
-      let newPosts = [...posts];
-      newPosts = newPosts.filter((el) => el.id != id);
-      setPosts(newPosts);
-      toast.success("Post deleted successfully!");
-      try {
-        await remove(ref(db, `posts/${id}`));
-      } catch (err) {
-        console.log(err);
-        toast.dismiss();
-        toast.error("Failed to delete post");
-        setPosts(oldPosts);
-      }
+      console.log(id);
+      dispatch(deletePost(id));
     });
   };
-
-  useEffect(() => {
-    const postsRef = ref(db, "posts");
-    const unsubscribe = onValue(postsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        let postsArray = Object.entries(data).map(([id, value]) => ({
-          id,
-          ...value,
-        }));
-        postsArray = postsArray.sort((a, b) => b.createdAt - a.createdAt);
-        setPosts(postsArray);
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  const itemsCount = 12;
-  const [currentPage, setCurrentPage] = useState(1);
-  const pagesCount = Math.ceil(posts.length / itemsCount);
-  const pages = Array.from({ length: pagesCount }, (_, i) => i + 1);
-  let start = (currentPage - 1) * itemsCount;
-  let end = start + itemsCount;
-  let paginatedData = posts.slice(start, end);
 
   const changePage = (p) => {
     setCurrentPage(p);
@@ -87,15 +61,12 @@ export default function Blog() {
 
   if (paginatedData.length == 0) {
     return (
-      <div className="flex flex-col gap-5 justify-center items-center mt-20 px-4">
+      <div className="flex flex-col gap-5 justify-center items-center mt-45 px-4">
         <img
-          className="max-w-full h-auto sm:w-80 md:w-96 lg:w-[500px] object-contain"
+          className="max-w-full h-auto object-contain"
           src="/No-Posts--Streamline-Bruxelles.png"
           alt="Empty state"
         />
-        <span className="text-xl text-sky-200 font-light font-serif">
-          No posts yet
-        </span>
       </div>
     );
   }
@@ -146,7 +117,9 @@ export default function Blog() {
                   onClick={() => changePage(p)}
                   className={`hover:scale-120 flex cursor-pointer items-center justify-center px-3 h-8 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700  dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 
                     ${
-                      currentPage == p ? "bg-gray-300 dark:bg-gray-700 " : "bg-white dark:bg-gray-800"
+                      currentPage == p
+                        ? "bg-gray-300 dark:bg-gray-700 "
+                        : "bg-white dark:bg-gray-800"
                     } dark:hover:text-white`}
                 >
                   {p}
@@ -203,8 +176,8 @@ export default function Blog() {
         </button>
       )}
 
-      {
-        user && <Link
+      {user && (
+        <Link
           to="/posts/create"
           className="cursor-pointer fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center
                  bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200
@@ -226,7 +199,7 @@ export default function Blog() {
             />
           </svg>
         </Link>
-      }
+      )}
     </>
   );
 }
